@@ -1,34 +1,31 @@
 // classes Employee, Manager, Engineer, Intern
 //Employee parent class:
 class Employee{
-  constructor(name, id, email){
+  constructor(name, id, email, role){
     this.name = name;
     this.id = id;
     this.email = email;
-    this.role = 'Employee'
-    
-    //methods
-  // this.getName(){
-  //   return name;
-  // }
-
-  // this.getId()
-
-  // this.getEmail()
-
-  // this.getRole()
+    this.role = role
 }}
-const person = new Employee('max','4','thorshammermw@gmail.com')
-console.log(person.email)
-
 class Manager extends Employee{
-  constructor(name, id, email, officeNumber){
+  constructor(name, id, email, role, officeNumber){
+    super(name, id, email, role)
     this.officeNumber = officeNumber
-    this.role = 'Manager'
-    this.getRole()
-  }
-
+    this.getOfficeNumber()
+    }
 }
+const Max = new Manager('max','4','thorshammermw@gmail.com', 'Manager', 20)
+console.log(Max.email)
+
+
+
+Employee.prototype.getInfo = function(){
+  return `Name: ${this.name} \nRole: ${this.role} \nID: ${this.id} \nEmail: ${this.email}  `
+}
+Manager.prototype.getOfficeNumber = function(){
+  return `Office Number: ${this.officeNumber}`
+}
+
 class Engineer extends Employee{
   constructor(name, id, email, github){
     this.github = github
@@ -46,3 +43,6 @@ class Intern extends Employee{
   }
 
 }
+const information = Max.getInfo()
+console.log(information)
+console.log(Max)
