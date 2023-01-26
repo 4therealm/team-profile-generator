@@ -1,27 +1,27 @@
-const inquirer = require('inquirer')
-import {engineerQuestions} from "/modules/questions.js";
-import {Employee} from "/modules/Employee.js";
-
-class Engineer extends Employee{
-  constructor(name, id, email, github){
-    super(name, id, email)
-    this.github = github
+const Employee = require("./Employee")
+class Engineer extends Employee {
+  constructor ( name, id, email, github ) {
+    super ( name, id, email );
+    this.github = github;
   }
-  getGithub(){return this.github}
+  getGithub () {
+    return this.github;
+  }
+  cardContent(){
+    return`
+    <div class ='col'>
+    <div class ='card'>
+    <h2>${this.name}</h2>
+    <h3>Engineer</h3>
+    <ul>
+      <li>ID: ${this.id}</li>
+      <li>Email: <a href="mailto:${this.email}">${this.email}</a></li>
+      <li><a href="https://github.com/${this.github}" target="_blank" rel="noopener noreferrer">${this.github}</a></li>
+    </ul>
+    </div>
+    </div>`
+  }
 }
 
-function getEngineerInfo(employeeObj){
-  inquirer
-  .prompt(engineerQuestions)
-  .then(data =>{
-    employeeObj.school = data.github
-    console.log(data)
-    console.log(employeeObj)
-  })
-  return employeeObj
-}
 
-module.exports = [
-  Engineer,
-  getEngineerInfo
-]
+module.exports = Engineer

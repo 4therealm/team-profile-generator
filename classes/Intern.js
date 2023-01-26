@@ -1,26 +1,27 @@
-const inquirer = require('inquirer')
-import {internQuestions} from "/modules/questions.js";
-import {Employee} from "/modules/Employee.js";
-
-class Intern extends Employee{
-  constructor(name, id, email, school){
-    super(name, id, email)
+const Employee = require("./Employee")
+class Intern extends Employee {
+  constructor ( name, id, email, school ) {
+    super ( name, id, email );
     this.school = school;
   }
-  getSchool(){return `School: ${this.school}`} 
-}
-function getInternInfo(employeeObj){
-  inquirer
-  .prompt(internQuestions)
-  .then(data =>{
-   employeeObj.school = data.school
-   console.log(data)
-   console.log(employeeObj)
-  })
-  return employeeObj
-}
-
-  module.exports = {
-    Intern,
-    getInternInfo
+  getSchool () {
+    return this.school;
   }
+  cardContent(){
+    return`
+
+    <div class ='col'>
+      <div class ='card'>
+      <h2>${this.name}</h2>
+      <h3>Intern</h3>
+      <ul>
+        <li>ID: ${this.id}</li>
+        <li>Email: <a href="mailto:${this.email}">${this.email}</a></li>
+        <li>School: ${this.school}</li>
+      </ul>
+    </div>
+  </div>`
+  }
+} 
+
+module.exports = Intern

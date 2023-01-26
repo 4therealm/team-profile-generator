@@ -1,9 +1,14 @@
-const fs =require('fs')
+const Employee = require('./classes/Employee')
+const Manager = require('./classes/Manager')
+const Engineer = require('./classes/Engineer')
+const Intern = require('./classes/Intern')
+const fs = require('fs')
 const inquirer = require ( 'inquirer' );
+const nodeMon = require ( 'nodemon' );
 const team = [];
 const basicInfo = [
   { type: 'input', name: 'name', message: 'what is their name?' },
-  { type: 'input', name: 'Id', message: 'what is their ID?' },
+  { type: 'input', name: 'id', message: 'what is their ID?' },
   { type: 'input', name: 'email', message: 'What is their email?' },
 ];
 let htmlContent =  `<!DOCTYPE html>
@@ -16,89 +21,10 @@ let htmlContent =  `<!DOCTYPE html>
   <title>Team Roster</title>
 </head>
 <body>`
-class Employee {
-  constructor ( name, id, email ) {
-    this.name = name;
-    this.id = id;
-    this.email = email;
-  }
-  getName () {
-    return this.name;
-  }
-  getId () {
-    return this.id;
-  }
-  getEmail () {
-    return this.email;
-  }
-}
-class Manager extends Employee {
-  constructor ( name, id, email, officeNumber ) {
-    super ( name, id, email, );
-    this.officeNumber = officeNumber;
-  }
-  getOfficeNumber () {
-    return this.officeNumber;
-  }
-  cardContent(){
-    return`
-    <div>
-    <h2>${this.name}</h2>
-    <h3>Manager</h3>
-    <ul>
-      <li>ID: ${this.id}</li>
-      <li>Email: ${this.email}</li>
-      <li>Office: ${this.getOfficeNumber()}</li>
-    </ul>
-  </div>`
-  }
-}
-class Engineer extends Employee {
-  constructor ( name, id, email, github ) {
-    super ( name, id, email );
-    this.github = github;
-  }
-  getGithub () {
-    return this.github;
-  }
-  cardContent(){
-    return`
-    <div>
-    <h2>${this.name}</h2>
-    <h3>Engineer</h3>
-    <ul>
-      <li>ID: ${this.id}</li>
-      <li>Email: ${this.email}</li>
-      <li>Github: ${this.github}</li>
-    </ul>
-  </div>`
-  }
-}
-class Intern extends Employee {
-  constructor ( name, id, email, school ) {
-    super ( name, id, email );
-    this.school = school;
-  }
-  getSchool () {
-    return this.school;
-  }
-  cardContent(){
-    return`
-    <div>
-    <h2>${this.name}</h2>
-    <h3>Intern</h3>
-    <ul>
-      <li>ID: ${this.id}</li>
-      <li>Email: ${this.email}</li>
-      <li>School: ${this.school}</li>
-    </ul>
-  </div>`
-  }
-} 
 
 start ();
 
-
+//initiation
 function start (){
   inquirer
   .prompt ( { 
@@ -108,6 +34,7 @@ function start (){
     choices: [ 'yes', 'no' ] } )
   .then ( ( data ) => {data ? getPosition () : exit();});
 }
+//determines what to do after an employee has been added, or removed
 function nextAction(){
   basicInfo.pop()
   inquirer
@@ -125,6 +52,7 @@ function nextAction(){
     }
   } );
 }
+//assigns role to new employee and calls the corresponding Class function
 function getPosition(){
   inquirer
   .prompt ( {
@@ -135,14 +63,12 @@ function getPosition(){
   .then ( ( choice ) => {
     switch ( choice.role ) {
       case 'Manager': hireManager ();
-        console.log ( team.length );
         break;
       case 'Engineer': hireEngineer ();
-        console.log ( team.length );
         break;
       case 'Intern': hireIntern ();
-        console.log ( team.length );
         break;
+      default: startGame()
     }
   } );
 }
@@ -183,6 +109,7 @@ function hireIntern(){
     });
     
 }
+// logs current team array, then user decides to generate or edit
 function previewTeam(){
   console.log(team)
   inquirer
@@ -193,6 +120,7 @@ function previewTeam(){
     choices: [ 'yes', 'no' ] } )
   .then ( ( data ) => {data.confirm == 'yes' ? writeHTML() : editTeam();});
 }
+//user decides to add or remove employees from array
 function editTeam(){
   inquirer
   .prompt ( {
@@ -209,30 +137,32 @@ function editTeam(){
     }
   } );
 }
+//creates an html file with team roster
 function writeHTML(){
   team.forEach(emp =>{htmlContent += emp.cardContent()})
   htmlContent += `</body></html>`
   fs.writeFile('index.html', htmlContent,(err) =>
   err ? console.log(err) : console.log('Success!')
 );  
+nextAction()
 }
+//user targets employees in team array they wish to remove. targets are located and spliced from array
 function removeEmp(){
   inquirer
   .prompt ({
-    type: 'checkbox',
-    name: 'stack',
-    message: 'Select employees to remove',
+    type: 'list',
+    name: 'target',
+    message: 'Select employee to remove',
     choices: [...team],
   } )
   .then ( ( selection ) => {
-    console.log(selection)
-    selection.forEach(emp=>{
-    let target = team.indexOf(emp)
-    team.splice(target,1)
+    console.log(selection.target)
+    let targetIndex = team.indexOf(selection.target)
     console.log(team)
-    console.log(`\n--------------\n`)
-    console.log(`${emp} has been removed from the roster`)
+    team.splice(targetIndex,1)
+    console.log(team)
+    console.log(`\n------${selection.target} has been removed from the roster--------\n`)
+    start()
     })
-   nextAction() 
-  } );
+  
 }
