@@ -4,7 +4,7 @@ const Engineer = require('./classes/Engineer')
 const Intern = require('./classes/Intern')
 const fs = require('fs')
 const inquirer = require ( 'inquirer' );
-const nodeMon = require ( 'nodemon' );
+const nodemon = require ( 'nodemon' );
 const team = [];
 const basicInfo = [
   { type: 'input', name: 'name', message: 'what is their name?' },
