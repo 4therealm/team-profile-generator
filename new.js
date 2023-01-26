@@ -1,3 +1,4 @@
+const fs =require('fs')
 const inquirer = require ( 'inquirer' );
 const team = [];
 const basicInfo = [
@@ -13,15 +14,12 @@ class Employee {
     this.email = email;
   }
   getName () {
-    console.log ( this.name );
     return this.name;
   }
   getId () {
-    console.log ( this.id );
     return this.id;
   }
   getEmail () {
-    console.log ( this.email );
     return this.email;
   }
 }
@@ -31,9 +29,19 @@ class Manager extends Employee {
     this.officeNumber = officeNumber;
   }
   getOfficeNumber () {
-    return `Office Number: ${
-      this.officeNumber
-    }`;
+    return this.officeNumber;
+  }
+  cardContent(){
+    return`
+    <div>
+    <h2>${this.name}</h2>
+    <h3>Manager</h3>
+    <ul>
+      <li>ID: ${this.id}</li>
+      <li>Email: ${this.email}</li>
+      <li>Office: ${this.OfficeNumber}</li>
+    </ul>
+  </div>`
   }
 }
 class Engineer extends Employee {
@@ -44,6 +52,18 @@ class Engineer extends Employee {
   getGithub () {
     return this.github;
   }
+  cardContent(){
+    return`
+    <div>
+    <h2>${this.name}</h2>
+    <h3>Engineer</h3>
+    <ul>
+      <li>ID: ${this.id}</li>
+      <li>Email: ${this.email}</li>
+      <li>Github: ${this.github}</li>
+    </ul>
+  </div>`
+  }
 }
 class Intern extends Employee {
   constructor ( name, id, email, school ) {
@@ -51,13 +71,23 @@ class Intern extends Employee {
     this.school = school;
   }
   getSchool () {
-    return `School: ${
-      this.school
-    }`;
+    return this.school;
+  }
+  cardContent(){
+    return`
+    <div>
+    <h2>${this.name}</h2>
+    <h3>Intern</h3>
+    <ul>
+      <li>ID: ${this.id}</li>
+      <li>Email: ${this.email}</li>
+      <li>School: ${this.school}</li>
+    </ul>
+  </div>`
   }
 } 
 
-start ();
+// start ();
 
 function start () {
   inquirer
@@ -125,3 +155,32 @@ function hireIntern () {
       team.push ( newIntern );
   } );
 }
+const max = new Manager('max', 5, 'thorshammermw@gmail.com', 12);
+const maxwell = new Engineer('maxwell', 6, 'thorshammermw@gmail.com', '4therealm');
+const maxine = new Intern('maxine', 7, 'thorshammermw@gmail.com', 'Homeschooled');
+const myTeam = [max,maxwell,maxine]
+// console.log(max.cardContent())
+// console.log(maxwell.cardContent())
+// console.log(maxine.cardContent())
+const htmlOpening = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>`
+function writeHTML(){
+  let htmlContent = `${htmlOpening}`
+  myTeam.forEach(emp =>{
+    htmlContent += emp.cardContent()
+  })
+  htmlContent += `</body></html>`
+  fs.writeFile('index.html', htmlContent,(err) =>
+  err ? console.log(err) : console.log('Success!')
+);  
+}
+writeHTML()
+
+// console.log(myTeam)
