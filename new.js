@@ -6,7 +6,16 @@ const basicInfo = [
   { type: 'input', name: 'Id', message: 'what is their ID?' },
   { type: 'input', name: 'email', message: 'What is their email?' },
 ];
-
+let htmlContent =  `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/dist/style.css">
+  <title>Team Roster</title>
+</head>
+<body>`
 class Employee {
   constructor ( name, id, email ) {
     this.name = name;
@@ -39,7 +48,7 @@ class Manager extends Employee {
     <ul>
       <li>ID: ${this.id}</li>
       <li>Email: ${this.email}</li>
-      <li>Office: ${this.OfficeNumber}</li>
+      <li>Office: ${this.getOfficeNumber()}</li>
     </ul>
   </div>`
   }
@@ -87,18 +96,36 @@ class Intern extends Employee {
   }
 } 
 
-// start ();
+start ();
 
-function start () {
+
+function start (){
   inquirer
   .prompt ( { 
     type: 'list',
     name: 'addEmployee', 
     message: 'Would you like to add an employee?', 
     choices: [ 'yes', 'no' ] } )
-  .then ( ( data ) => {data ? getPosition () : exit ();});
+  .then ( ( data ) => {data ? getPosition () : exit();});
 }
-function getPosition () {
+function nextAction(){
+  basicInfo.pop()
+  inquirer
+  .prompt ( {
+    type: 'list', 
+    name: 'nextAction', 
+    message: 'What would you like to do next, boss?', 
+    choices: [ 'Add Employee','Preview Roster' ] } )
+  .then ( ( choice ) => {
+    switch ( choice.nextAction ) {
+      case 'Add Employee': getPosition();
+        break;
+      case 'Preview Roster': previewTeam();
+        break;
+    }
+  } );
+}
+function getPosition(){
   inquirer
   .prompt ( {
     type: 'list', 
@@ -119,68 +146,93 @@ function getPosition () {
     }
   } );
 }
-function hireManager () {
+function hireManager(){
   basicInfo.push ( { 
     type: 'input', 
     message: 'What is their office number?', 
     name: 'officeNumber' } );
   inquirer
     .prompt ( basicInfo )
-    .then ( data => {
-      const newManager = new Manager ( data.name, data.id, data.email, data.officeNumber );
-      team.push ( newManager );
-  } );
+    .then ( data => {team.push ( new Manager ( data.name, data.id, data.email, data.officeNumber ) );
+      console.log('\n----------------------Hired--------------------\n')
+      nextAction()
+    } );
 }
-function hireEngineer () {
+function hireEngineer(){
   basicInfo.push ( { 
     type: 'input', 
     message: 'What is their Github name?', 
     name: 'github' } );
   inquirer
     .prompt ( basicInfo )
-    .then ( data => {
-      const newEngineer = new Engineer ( data.name, data.id, data.email, data.github );
-      team.push ( newEngineer );
-  } );
+    .then ( data => {team.push ( new Engineer ( data.name, data.id, data.email, data.github ));
+      console.log('\n----------------------Hired--------------------\n')
+      nextAction()
+        });
 }
-function hireIntern () {
+function hireIntern(){
   basicInfo.push ( { 
     type: 'input', 
     message: 'What school did they go to?', 
     name: 'school' } );
   inquirer
     .prompt ( basicInfo )
-    .then ( data => {
-      const newIntern = new Intern ( data.name, data.id, data.email, data.school );
-      team.push ( newIntern );
+    .then ( data => {team.push ( new Intern ( data.name, data.id, data.email, data.school ));
+      console.log('\n----------------------Hired--------------------\n')
+      nextAction()
+    });
+    
+}
+function previewTeam(){
+  console.log(team)
+  inquirer
+  .prompt ( { 
+    type: 'list',
+    name: 'confirm', 
+    message: 'Would you like to generate this team roster?', 
+    choices: [ 'yes', 'no' ] } )
+  .then ( ( data ) => {data.confirm == 'yes' ? writeHTML() : editTeam();});
+}
+function editTeam(){
+  inquirer
+  .prompt ( {
+    type: 'list', 
+    name: 'action', 
+    message: 'Choose an action', 
+    choices: [ 'Add new employee', 'Remove existing employee'] } )
+  .then ( ( choice ) => {
+    switch ( choice.action ) {
+      case 'Add new employee': getPosition();
+        break;
+      case 'Remove existing employee': removeEmp();
+        break;
+    }
   } );
 }
-const max = new Manager('max', 5, 'thorshammermw@gmail.com', 12);
-const maxwell = new Engineer('maxwell', 6, 'thorshammermw@gmail.com', '4therealm');
-const maxine = new Intern('maxine', 7, 'thorshammermw@gmail.com', 'Homeschooled');
-const myTeam = [max,maxwell,maxine]
-// console.log(max.cardContent())
-// console.log(maxwell.cardContent())
-// console.log(maxine.cardContent())
-const htmlOpening = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>`
 function writeHTML(){
-  let htmlContent = `${htmlOpening}`
-  myTeam.forEach(emp =>{
-    htmlContent += emp.cardContent()
-  })
+  team.forEach(emp =>{htmlContent += emp.cardContent()})
   htmlContent += `</body></html>`
   fs.writeFile('index.html', htmlContent,(err) =>
   err ? console.log(err) : console.log('Success!')
 );  
 }
-writeHTML()
-
-// console.log(myTeam)
+function removeEmp(){
+  inquirer
+  .prompt ({
+    type: 'checkbox',
+    name: 'stack',
+    message: 'Select employees to remove',
+    choices: [...team],
+  } )
+  .then ( ( selection ) => {
+    console.log(selection)
+    selection.forEach(emp=>{
+    let target = team.indexOf(emp)
+    team.splice(target,1)
+    console.log(team)
+    console.log(`\n--------------\n`)
+    console.log(`${emp} has been removed from the roster`)
+    })
+   nextAction() 
+  } );
+}
