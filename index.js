@@ -1,13 +1,21 @@
-const Employee = require('./classes/Employee')
-const Engineer = require('./classes/Engineer')
-const Manager = require('./classes/Manager')
-const Intern = require('./classes/Intern')
+const inquirer = require('inquirer')
+import {new_employee} from "/modules/Employee.js";
+const myTeamArray = [];
 
 
-Manager.prototype.getOfficeNumber = function(){
-  return `Office Number: ${this.officeNumber}`
+start()
+function start(){
+  inquirer
+  .prompt({
+    type:'list',
+    name: 'addEmployee',
+    message:'Would you like to add an employee?',
+    choices: ['yes', 'no']
+  })
+  .then((data) => {data ? getBasicInfo() : exit()});
 }
 
-const information = Max.getInfo()
-console.log(information)
-console.log(Max)
+
+console.log(new_employee)
+
+
