@@ -4,7 +4,12 @@
   "description": "Your application should use Jest Links to an external site.for running the unit tests and Inquirer Links to an external site.for collecting input from the user. The application will be invoked by using the following command:",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "start": "nodemon ./src/index.js"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": ["html"]
   },
   "repository": {
     "type": "git",
@@ -21,6 +26,7 @@
     "inquirer": "^8.2.4"
   },
   "devDependencies": {
-    "jest": "^29.4.0"
+    "jest": "^29.4.0",
+    "nodemon": "^2.0.20"
   }
 }
