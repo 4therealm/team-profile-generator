@@ -1,0 +1,13 @@
+
+body{
+  background-color: steelblue;
+}
+.row{
+  justify-content: center;
+  
+  
+}
+ .employeeCard{
+  margin: .5rem;
+  
+}

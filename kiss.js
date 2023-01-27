@@ -5,24 +5,40 @@ const Intern = require('./classes/Intern')
 const fs = require('fs')
 const inquirer = require ( 'inquirer' );
 const nodemon = require ( 'nodemon' );
+const {getMaxListeners}=require('process')
 const team = [];
 const basicInfo = [
   { type: 'input', name: 'name', message: 'what is their name?' },
   { type: 'input', name: 'id', message: 'what is their ID?' },
   { type: 'input', name: 'email', message: 'What is their email?' },
 ];
-let htmlContent =  `<!DOCTYPE html>
+let htmlContent =  `
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
   <link rel="stylesheet" href="/dist/style.css">
   <title>Team Roster</title>
 </head>
-<body>`
-
-start ();
+<body>
+  <div class="container">
+    <div class="row cardContainer">`
+const htmlClosing = `
+        </div>
+      </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>`
+// close inquirer input if user press "escape" key
+process.stdin.on('keypress', function(_,key) {
+    if(key.name==="escape") {
+      exit()
+    }
+  });
+// start ();
 
 //initiation
 function start (){
@@ -42,12 +58,14 @@ function nextAction(){
     type: 'list', 
     name: 'nextAction', 
     message: 'What would you like to do next, boss?', 
-    choices: [ 'Add Employee','Preview Roster' ] } )
+    choices: [ 'Add Employee','Preview Roster', 'Exit' ] } )
   .then ( ( choice ) => {
     switch ( choice.nextAction ) {
       case 'Add Employee': getPosition();
         break;
       case 'Preview Roster': previewTeam();
+        break;
+      case 'Exit': exit();
         break;
     }
   } );
@@ -68,7 +86,7 @@ function getPosition(){
         break;
       case 'Intern': hireIntern ();
         break;
-      default: startGame()
+    
     }
   } );
 }
@@ -80,7 +98,7 @@ function hireManager(){
   inquirer
     .prompt ( basicInfo )
     .then ( data => {team.push ( new Manager ( data.name, data.id, data.email, data.officeNumber ) );
-      console.log('\n----------------------Hired--------------------\n')
+      console.log(`\n----------------------${data.name} has been Hired!--------------------\n`)
       nextAction()
     } );
 }
@@ -92,7 +110,7 @@ function hireEngineer(){
   inquirer
     .prompt ( basicInfo )
     .then ( data => {team.push ( new Engineer ( data.name, data.id, data.email, data.github ));
-      console.log('\n----------------------Hired--------------------\n')
+      console.log(`\n----------------------${data.name} has been Hired!--------------------\n`)
       nextAction()
         });
 }
@@ -104,7 +122,7 @@ function hireIntern(){
   inquirer
     .prompt ( basicInfo )
     .then ( data => {team.push ( new Intern ( data.name, data.id, data.email, data.school ));
-      console.log('\n----------------------Hired--------------------\n')
+      console.log(`\n----------------------${data.name} has been Hired!--------------------\n`)
       nextAction()
     });
     
@@ -139,13 +157,35 @@ function editTeam(){
 }
 //creates an html file with team roster
 function writeHTML(){
+  //dummy array for testing
+  const max = new Manager('max',4,'thorshammermw@gmail.com',85)
+  const maxwell = new Engineer('maxwell',5,'thorshammermw@gmail.com','4therealm')
+  const maxine = new Engineer('maxine',9,'thorshammermw@gmail.com','odeToTheCode')
+  const maxitaxi = new Intern('maxitaxi',55,'thorshammermw@gmail.com','homeschool')
+  const maxette = new Intern('maxette',55,'thorshammermw@gmail.com','homeschool')
+  const dummyArray = [max, maxwell, maxine, maxitaxi, maxette]
   team.forEach(emp =>{htmlContent += emp.cardContent()})
-  htmlContent += `</body></html>`
+  htmlContent+= htmlClosing
   fs.writeFile('index.html', htmlContent,(err) =>
-  err ? console.log(err) : console.log('Success!')
+  err ? console.log(err) : console.log('\nSuccess!\n')
 );  
 nextAction()
 }
+TestWriteHTML()
+function TestWriteHTML(){
+  const max = new Manager('max',4,'thorshammermw@gmail.com',85)
+  const maxwell = new Engineer('maxwell',5,'thorshammermw@gmail.com','4therealm')
+  const maxine = new Engineer('maxine',9,'thorshammermw@gmail.com','odeToTheCode')
+  const maxitaxi = new Intern('maxitaxi',55,'thorshammermw@gmail.com','homeschool')
+  const maxette = new Intern('maxette',55,'thorshammermw@gmail.com','homeschool')
+  
+  const dummyArray = [max, maxwell, maxine, maxitaxi, maxette]
+  
+  dummyArray.forEach(emp =>{htmlContent += emp.cardContent()})
+  htmlContent+= htmlClosing
+  fs.writeFile('index.html', htmlContent,(err) =>
+  err ? console.log(err) : console.log('\nSuccess!\n')
+);}
 //user targets employees in team array they wish to remove. targets are located and spliced from array
 function removeEmp(){
   inquirer
@@ -158,11 +198,10 @@ function removeEmp(){
   .then ( ( selection ) => {
     console.log(selection.target)
     let targetIndex = team.indexOf(selection.target)
-    console.log(team)
     team.splice(targetIndex,1)
     console.log(team)
     console.log(`\n------${selection.target} has been removed from the roster--------\n`)
-    start()
+    previewTeam()
     })
   
 }
