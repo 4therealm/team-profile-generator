@@ -20,6 +20,10 @@ let htmlContent =  `
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/dist/style.css">
   <title>Team Roster</title>
 </head>
@@ -38,7 +42,7 @@ process.stdin.on('keypress', function(_,key) {
       exit()
     }
   });
-// start ();
+start ();
 
 //initiation
 function start (){
@@ -157,13 +161,6 @@ function editTeam(){
 }
 //creates an html file with team roster
 function writeHTML(){
-  //dummy array for testing
-  const max = new Manager('max',4,'thorshammermw@gmail.com',85)
-  const maxwell = new Engineer('maxwell',5,'thorshammermw@gmail.com','4therealm')
-  const maxine = new Engineer('maxine',9,'thorshammermw@gmail.com','odeToTheCode')
-  const maxitaxi = new Intern('maxitaxi',55,'thorshammermw@gmail.com','homeschool')
-  const maxette = new Intern('maxette',55,'thorshammermw@gmail.com','homeschool')
-  const dummyArray = [max, maxwell, maxine, maxitaxi, maxette]
   team.forEach(emp =>{htmlContent += emp.cardContent()})
   htmlContent+= htmlClosing
   fs.writeFile('index.html', htmlContent,(err) =>
@@ -171,21 +168,21 @@ function writeHTML(){
 );  
 nextAction()
 }
-TestWriteHTML()
-function TestWriteHTML(){
-  const max = new Manager('max',4,'thorshammermw@gmail.com',85)
-  const maxwell = new Engineer('maxwell',5,'thorshammermw@gmail.com','4therealm')
-  const maxine = new Engineer('maxine',9,'thorshammermw@gmail.com','odeToTheCode')
-  const maxitaxi = new Intern('maxitaxi',55,'thorshammermw@gmail.com','homeschool')
-  const maxette = new Intern('maxette',55,'thorshammermw@gmail.com','homeschool')
+// TestWriteHTML()
+// function TestWriteHTML(){
+//   const max = new Manager('max',4,'thorshammermw@gmail.com',85)
+//   const maxwell = new Engineer('maxwell',5,'thorshammermw@gmail.com','4therealm')
+//   const maxine = new Engineer('maxine',9,'thorshammermw@gmail.com','odeToTheCode')
+//   const maxitaxi = new Intern('maxitaxi',55,'thorshammermw@gmail.com','homeschool')
+//   const maxette = new Intern('maxette',55,'thorshammermw@gmail.com','homeschool')
   
-  const dummyArray = [max, maxwell, maxine, maxitaxi, maxette]
+//   const dummyArray = [max, maxwell, maxine, maxitaxi, maxette]
   
-  dummyArray.forEach(emp =>{htmlContent += emp.cardContent()})
-  htmlContent+= htmlClosing
-  fs.writeFile('index.html', htmlContent,(err) =>
-  err ? console.log(err) : console.log('\nSuccess!\n')
-);}
+//   dummyArray.forEach(emp =>{htmlContent += emp.cardContent()})
+//   htmlContent+= htmlClosing
+//   fs.writeFile('index.html', htmlContent,(err) =>
+//   err ? console.log(err) : console.log('\nSuccess!\n')
+// );}
 //user targets employees in team array they wish to remove. targets are located and spliced from array
 function removeEmp(){
   inquirer

@@ -1,8 +1,10 @@
 
 body{
-  background-color: steelblue;
+  background-color: rgb(26, 73, 111);
+  font-family: 'Josefin Sans', sans-serif;
 }
 .row{
+  margin-top: 5rem;
   justify-content: center;
   
   
@@ -10,4 +12,10 @@ body{
  .employeeCard{
   margin: .5rem;
   
+}
+h5{
+  font-weight: bold;
+}
+.icons{
+  margin-left: .5rem;
 }
