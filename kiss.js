@@ -206,7 +206,6 @@ function writeHTML() {
 //   fs.writeFile('index.html', htmlContent,(err) =>
 //   err ? console.log(err) : console.log('\nSuccess!\n')
 // );}
-//user targets employees in team array they wish to remove. targets are located and spliced from array
 function removeEmp() {
   inquirer
     .prompt({
