@@ -4,7 +4,6 @@ const Engineer = require("./classes/Engineer");
 const Intern = require("./classes/Intern");
 const fs = require("fs");
 const inquirer = require("inquirer");
-const nodemon = require("nodemon");
 const { getMaxListeners } = require("process");
 const team = [];
 const basicInfo = [
@@ -191,21 +190,6 @@ function writeHTML() {
   );
   nextAction();
 }
-// TestWriteHTML()
-// function TestWriteHTML(){
-//   const max = new Manager('max',4,'thorshammermw@gmail.com',85)
-//   const maxwell = new Engineer('maxwell',5,'thorshammermw@gmail.com','4therealm')
-//   const maxine = new Engineer('maxine',9,'thorshammermw@gmail.com','odeToTheCode')
-//   const maxitaxi = new Intern('maxitaxi',55,'thorshammermw@gmail.com','homeschool')
-//   const maxette = new Intern('maxette',55,'thorshammermw@gmail.com','homeschool')
-
-//   const dummyArray = [max, maxwell, maxine, maxitaxi, maxette]
-
-//   dummyArray.forEach(emp =>{htmlContent += emp.cardContent()})
-//   htmlContent+= htmlClosing
-//   fs.writeFile('index.html', htmlContent,(err) =>
-//   err ? console.log(err) : console.log('\nSuccess!\n')
-// );}
 function removeEmp() {
   inquirer
     .prompt({
