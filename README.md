@@ -1,10 +1,30 @@
-Your application should use Jest Links to an external site.for running the unit tests and Inquirer Links to an external site.for collecting input from the user. The application will be invoked by using the following command:
 
+
+
+
+
+
+
+# Team-Profile-Generator  
+A CLI operated app that will create employee cards based on users input, then display those cards in a generated HTML document.
+
+## description
+* Assignment: #10
+* Due: 1/30/2023  
+* deployed: https://4therealm.github.io/team-profile-generator/   
+* repo: https://github.com/4therealm/team-profile-generator 
+* Demo: https://drive.google.com/file/d/1EycNXrv2jia5hWvPu1Ck5_Jo5d5gXM57/view?usp=share_link
+* Photo
+  <img src="/img/employee-html-screenshot.PNG" alt="a display of three employee profile cards">
+
+## User Story
 AS A manager
 I WANT to generate a webpage that displays my team's basic info
-SO THAT I have quick access to their emails and GitHub profiles
+SO THAT I have quick access to their emails and GitHub profiles.
 
-GIVEN a command-line application that accepts user input
+## Acceptance Criteria
+GIVEN a command-line application that accepts user input  
+
 WHEN I am prompted for my team members and their information
 THEN an HTML file is generated that displays a nicely formatted team roster based on user input
 WHEN I click on an email address in the HTML
@@ -24,46 +44,20 @@ THEN I exit the application, and the HTML is generated
 
 
 
-The application must have these classes: Employee, Manager, Engineer, and Intern. The tests for these classes (in the _tests_ directory) must all pass.
 
-The first class is an Employee parent class with the following properties and methods:
 
-name
+## Instal
+```
+npm i
 
-id
+```
+## Run
+```
+node kiss.js
 
-email
+```
+## Testing
+```
+npm test
 
-getName()
-
-getId()
-
-getEmail()
-
-getRole() // Returns 'Employee'
-
-The other three classes will extend Employee.
-
-In addition to Employee's properties and methods, Manager will also have:
-
-officeNumber
-
-getRole() // Overridden to return 'Manager'
-
-In addition to Employee's properties and methods, Engineer will also have:
-
-github // GitHub username
-
-getGithub()
-
-getRole() // Overridden to return 'Engineer'
-
-In addition to Employee's properties and methods, Intern will also have:
-
-school
-
-getSchool()
-
-getRole() // Overridden to return 'Intern'
-
-Finally, although it’s not a requirement, you should consider adding validation to ensure that user input provided is in the proper expected format.
+```
